@@ -22,6 +22,16 @@ def play_hangman(word, words, trie, max_wrong_guesses, verbose=False):
     while "_" in pattern and wrong_guesses < max_wrong_guesses:
         best_guess = best_letter(remaining_words, words, pattern, guessed)  # Pass pattern
 
+        if verbose:
+            freqs = compute_letter_frequencies(remaining_words, pattern, guessed)
+            print("--------------------------------------------------")
+            print(f"Choosing best letter... Picked \"{best_guess}\" (appears in {freqs.get(best_guess, 0)} remaining words)")
+            print(f"Current pattern: {''.join(pattern)}")
+            print(f"Wrong guesses so far: {wrong_guesses}")
+            print(f"Remaining possible words: {', '.join(remaining_words) if remaining_words else 'No remaining words'}")
+            print(f"Letter frequency in remaining possible words: {dict(sorted(freqs.items(), key=lambda item: item[1], reverse=True))}")
+            print("--------------------------------------------------\n")
+
         if not best_guess:
             break
         guessed.add(best_guess.lower())
@@ -31,16 +41,6 @@ def play_hangman(word, words, trie, max_wrong_guesses, verbose=False):
             pattern = [letter if letter in guessed else "_" for letter in word]  # Update pattern
         else:
             wrong_guesses += 1
-        
-        if verbose:
-            freqs = compute_letter_frequencies(remaining_words, pattern, guessed)
-            print("--------------------------------------------------")
-            print(f"Current pattern: {''.join(pattern)}")
-            print(f"{freqs}")
-            print(f"Choosing best letter... Picked \"{best_guess}\" (appears in {freqs.get(best_guess, 0)} remaining words)")
-            print(f"Remaining possible words: {', '.join(remaining_words) if remaining_words else 'No remaining words'}")
-            print(f"Wrong guesses so far: {wrong_guesses}")
-            print("--------------------------------------------------\n")
 
         remaining_words = trie.search_pattern(pattern, guessed)
     
