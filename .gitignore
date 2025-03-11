@@ -1,0 +1,91 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Virtual environment
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# mypy
+.mypy_cache/
+.dmypy.json
+
+# PyCharm
+.idea/
+
+# VSCode
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# Logs and debugging
+logs/
+*.log
+
+# Local development
+local_settings.py
+
+# Docker
+*.dockerfile
+.env
+
+# Ignore SQLite database
+*.sqlite3
+
+# Ignore Python packaging artifacts
+*.whl
+*.tar.gz
+*.zip
+
+# Ignore compiled Cython files
+*.c
+*.so
+
+# Ignore AWS SAM build artifacts
+.aws-sam/
+
+# Ignore poetry virtual environments
+poetry.lock
+
+# Ignore pre-commit hooks cache
+.pre-commit-cache/
+
+# Other
+archive/
+.DS_Store
+*.pkl
