@@ -32,13 +32,13 @@ if __name__ == "__main__":
     max_wrong_guesses_required = 0
     results = []
 
-    batch_size = max(1, len(word_list) // cpu_count() // 100)
+    batch_size = max(1, len(word_list) // cpu_count())
     batches = [word_list[i:i + batch_size] for i in range(0, len(word_list), batch_size)]
 
     if args.no_parallel:
         results = [process_word((word, all_words, trie, args.max_wrong, verbose)) for word in tqdm(word_list, desc="Processing words")]
     else:
-        with Pool(cpu_count()*2) as pool:
+        with Pool(cpu_count()) as pool:
             results = list(tqdm(pool.imap(process_batch, 
                 [[(word, all_words, trie, args.max_wrong, verbose) for word in batch] for batch in batches]), 
                 total=len(batches), desc="Processing batches"))
@@ -53,10 +53,15 @@ if __name__ == "__main__":
     
     if any(not winnable for _, winnable, _, _, _ in results):
         print("There is at least one word that cannot always be won in Hangman.")
-        for word, winnable, guess_sequence, remaining_possible_words, _ in results:
+        for word, winnable, guess_sequence, remaining_possible_words, wrong_guesses in results:
             if not winnable:
-                print(f"Unwinnable word: {word}")
-                print(f"Guesses made: {', '.join(guess_sequence)}")
+                required_wrong_guesses = len([g for g in guess_sequence if g not in word])
+                print(f"Unwinnable word: {word} (Wrong guesses required: {required_wrong_guesses})")
+                highlighted_guesses = [
+                    f"\033[92m{g}\033[0m" if g in word else f"\033[91m{g}\033[0m"
+                    for g in guess_sequence
+                ]
+                print(f"Guesses made: {', '.join(highlighted_guesses)}")
                 print(f"Remaining possible words: {', '.join(remaining_possible_words)}")
     else:
         print("There exists a winning strategy for Hangman with the given word list.")
