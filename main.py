@@ -49,7 +49,8 @@ if __name__ == "__main__":
     for _, _, _, _, wrong_guesses in results:
         max_wrong_guesses_required = max(max_wrong_guesses_required, wrong_guesses)
     
-    print(f"Maximum number of wrong guesses required: {max_wrong_guesses_required}")
+    print(f"Maximum wrong guesses allowed: {args.max_wrong}")
+    print(f"Maximum number of wrong guesses needed: {max_wrong_guesses_required}")
     
     if any(not winnable for _, winnable, _, _, _ in results):
         print("There is at least one word that cannot always be won in Hangman.")

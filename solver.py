@@ -19,7 +19,7 @@ def play_hangman(word, words, trie, max_wrong_guesses, verbose=False):
     
     remaining_words = sorted(trie.search_pattern(pattern, guessed))
 
-    while "_" in pattern and wrong_guesses < max_wrong_guesses:
+    while "_" in pattern:
         best_guess = best_letter(remaining_words, words, pattern, guessed)  # Pass pattern
 
         if verbose:
