@@ -2,7 +2,7 @@
 
 # Hangman Solver
  
-# This is a **Hangman solver** implemented in Python. It uses **trie-based word searching** and **letter frequency analysis** to determine the best strategy for guessing words in a game of Hangman. The solver can evaluate a batch of words in parallel and determine whether a winning strategy exists for each word.
+This is a **Hangman solver** implemented in Python. It uses **trie-based word searching** and **letter frequency analysis** to determine the best strategy for guessing words in a game of Hangman. The solver can evaluate a batch of words in parallel and determine whether a winning strategy exists for each word.
  
 ## Features
  
