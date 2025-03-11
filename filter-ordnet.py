@@ -42,7 +42,7 @@ def filter_words(input_file, output_file, removed_file):
 
 # Example usage
 if __name__ == "__main__":
-    input_file = "ordnet.txt"  # Change this to your actual file name
+    input_file = "words.txt"  # Change this to your actual file name
     output_file = "filtered_words.txt"
     removed_file = "removed_words.txt"
     filter_words(input_file, output_file, removed_file)
