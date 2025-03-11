@@ -10,9 +10,24 @@ This is a **Hangman solver** implemented in Python. It uses **trie-based word se
 - **Letter frequency analysis** to determine the most optimal guesses.
 - **Parallel processing support** to handle large word lists efficiently.
 - **Customizable maximum wrong guesses** to simulate different difficulty levels.
-- **Verbose mode** for debugging and detailed output.
+ - **Verbose mode** for debugging and detailed output.
  
-## Installation
+ ## Heuristics and Frequency-Based Guessing
+ 
+ The Hangman solver uses **letter frequency analysis** to optimize guesses. The approach follows these heuristics:
+ 
+ 1. **Global Letter Frequency**: The solver first computes the frequency of each letter across all words in the dataset. This helps determine which letters are generally more common.
+ 2. **Pattern-Based Letter Frequency**: When playing Hangman, the solver only considers words that match the current revealed pattern. It calculates letter frequencies for the subset of words that still fit.
+ 3. **Optimal Letter Selection**: The solver prioritizes letters that:
+    - Appear most frequently in the remaining possible words.
+    - Have not yet been guessed.
+    - Are also common in the overall dataset.
+ 
+ 4. **Efficient Lookups with a Trie**: To quickly find valid words that fit the pattern, the solver uses a **Trie data structure**. This speeds up searches and ensures that letter frequency calculations remain efficient.
+ 
+ By combining **global** and **context-specific** letter frequency analysis, the solver makes **intelligent guesses** that minimize wrong attempts and maximize revealed letters.
+ 
+ ## Installation
  
 ### Prerequisites
  
