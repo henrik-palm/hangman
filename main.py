@@ -3,12 +3,22 @@ from tqdm import tqdm
 from word_loader import load_words
 from trie import build_trie
 from solver import play_hangman
-from multiprocessing import Pool, cpu_count
+from multiprocessing import Pool, cpu_count, Manager, Process
+
+def progress_monitor(total_items, progress_queue):
+    """Monitor progress and print status using tqdm."""
+    with tqdm(total=total_items, desc="Processing words") as pbar:
+        processed_count = 0
+        while processed_count < total_items:
+            processed_count += progress_queue.get()
+            pbar.update(1)
 
 def process_word(args):
-    """Wrapper function to process a single word in parallel."""
-    word, all_words, trie, max_wrong, verbose = args
-    return play_hangman(word, all_words, trie, max_wrong, verbose)
+    """Wrapper function to process a single word in parallel and update progress."""
+    word, all_words, trie, max_wrong, verbose, progress_queue = args
+    result = play_hangman(word, all_words, trie, max_wrong, verbose)
+    progress_queue.put(1)
+    return result
 
 def process_batch(batch):
     """Process a batch of words in parallel."""
@@ -38,13 +48,16 @@ if __name__ == "__main__":
     if args.no_parallel:
         results = [process_word((word, all_words, trie, args.max_wrong, verbose)) for word in tqdm(word_list, desc="Processing words")]
     else:
-        with Pool(cpu_count()) as pool:
-            results = list(tqdm(pool.imap(process_batch, 
-                [[(word, all_words, trie, args.max_wrong, verbose) for word in batch] for batch in batches]), 
-                total=len(batches), desc="Processing batches"))
+        with Manager() as manager:
+            progress_queue = manager.Queue()
+            monitor_process = Process(target=progress_monitor, args=(len(word_list), progress_queue))
+            monitor_process.start()
+            
+            with Pool(cpu_count()) as pool:
+                results = list(pool.imap(process_batch, 
+                    [[(word, all_words, trie, args.max_wrong, verbose, progress_queue) for word in batch] for batch in batches]))
 
-        # Flatten results since each batch returns a list of results
-        results = [item for sublist in results for item in sublist]
+            monitor_process.join()
     
     for _, _, _, _, wrong_guesses in results:
         max_wrong_guesses_required = max(max_wrong_guesses_required, wrong_guesses)
