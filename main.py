@@ -29,11 +29,19 @@ if __name__ == "__main__":
     parser.add_argument("--word", type=str, help="Run the script for a specific word instead of the whole list.")
     parser.add_argument("--max_wrong", type=int, default=9, help="Set the maximum number of wrong guesses (default: 9).")
     parser.add_argument("--no_parallel", action="store_true", help="Disable multiprocessing for debugging.")
+    parser.add_argument("--play", nargs="?", const=True, type=str, help="Launch the Hangman game. If a word is provided, use it; otherwise, use a random word.")
     args = parser.parse_args()
     
     filename = "filtered_words.txt"
     all_words = load_words(filename)
     
+    from game import hangman
+    import random
+    if args.play:
+        word_to_use = args.play if isinstance(args.play, str) else random.choice(all_words)
+        hangman(word_to_use.lower())
+        exit()
+
     verbose = bool(args.word)
     word_list = [args.word.lower()] if args.word else all_words
     
