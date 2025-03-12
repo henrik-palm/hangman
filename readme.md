@@ -93,6 +93,28 @@ Guesses made: e, a, i, o, u, s, t
 Remaining possible words: buzzer, pizzle
 ```
  
+## Playing the Hangman Game
+
+The Hangman solver also includes an interactive game mode. You can play the game by running:
+
+```sh
+python main.py --play
+```
+
+This will start a new game using a randomly selected word from the dataset. If you want to play with a specific word, provide it as an argument:
+
+```sh
+python main.py --play "byboer"
+```
+
+### Game Features:
+
+- **Interactive Gameplay**: The game will track guessed letters, incorrect attempts, and display Hangman visuals.
+- **Hints Available**: Type `"help"` during the game to receive a hint about the best letter to guess, based on the solver's logic.
+- **Revealed Characters**: Certain known characters (`" "`, `"-"`, and `"'"`) are automatically revealed at the start of the game.
+
+The game will continue until you either guess the word correctly or run out of attempts.
+
 ## Filtering Words
 
 To filter words from a dataset:
@@ -120,13 +142,13 @@ You can modify the input file name in `filter-ordnet.py` if needed.
 - `trie.py` – Implements a Trie data structure for word pattern searches.
 - `utils.py` – Utility functions, such as initializing guessed letters.
 - `word_loader.py` – Loads words from a file.
-- `filter-ordnet.py` – Filters words based on specific criteria, ensuring they contain at least five unique letters and do not include numbers or unwanted special characters. This script processes an input word list and generates a filtered list along with a separate file for removed words.
+ - `filter-ordnet.py` – Filters words based on specific criteria, ensuring they contain at least five unique letters and do not include numbers or unwanted special characters. This script processes an input word list and generates a filtered list along with a separate file for removed words.
+ - `game.py` – Implements the interactive Hangman game, including guessing logic, hints, and visual representation.
  
 ## Future Enhancements
  
 - Support for **multi-word Hangman phrases**.
 - Additional **heuristics for word guessing**.
-- Integration with an **interactive Hangman game interface**.
  
 ## License
  
