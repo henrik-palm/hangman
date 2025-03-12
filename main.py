@@ -7,7 +7,7 @@ from multiprocessing import Pool, cpu_count, Manager, Process
 
 def progress_monitor(total_items, progress_queue):
     """Monitor progress and print status using tqdm."""
-    with tqdm(total=total_items, desc="Processing words") as pbar:
+    with tqdm(total=total_items, desc="Processing words", mininterval=0.5, maxinterval=5) as pbar:
         processed_count = 0
         while processed_count < total_items:
             processed_count += progress_queue.get()
@@ -58,6 +58,9 @@ if __name__ == "__main__":
                     [[(word, all_words, trie, args.max_wrong, verbose, progress_queue) for word in batch] for batch in batches]))
 
             monitor_process.join()
+
+            # Flatten results since each batch returns a list of results
+            results = [item for sublist in results for item in sublist]
     
     for _, _, _, _, wrong_guesses in results:
         max_wrong_guesses_required = max(max_wrong_guesses_required, wrong_guesses)
