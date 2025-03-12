@@ -5,8 +5,8 @@ from trie import Trie
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def display_word(word, guessed_letters):
-    return ' '.join(letter if letter in guessed_letters else '_' for letter in word)
+def display_word(word, guessed_letters, known_chars={" ", "-", "'"}):
+    return ' '.join(letter if letter in guessed_letters or letter in known_chars else '_' for letter in word)
 
 def get_hangman_art(attempts):
     stages = [
@@ -108,16 +108,17 @@ def hangman(word, trie, all_words):
     if word is None:
         word = input("Enter the word for Hangman: ").strip().lower()
     clear_screen()
-    guessed_letters = set()
+    known_chars = {" ", "-", "'"}
+    guessed_letters = set(known_chars)
     attempts = 9
     last_message = "Welcome to Hangman!"
 
     while attempts > 0:
         clear_screen()
         print(get_hangman_art(attempts))
-        print(f"Word: {display_word(word, guessed_letters)}")
+        print(f"Word: {display_word(word, guessed_letters, known_chars)}")
         print(f"Wrong attempts left: {attempts}")
-        print(f"Guessed letters: {', '.join(sorted(guessed_letters)) if guessed_letters else ''}")
+        print(f"Guessed letters: {', '.join(sorted(guessed_letters - known_chars)) if guessed_letters - known_chars else ''}")
         if last_message:
             print(last_message)
         
@@ -153,17 +154,17 @@ def hangman(word, trie, all_words):
         if all(letter in guessed_letters for letter in word):
             clear_screen()
             print(get_hangman_art(attempts))
-            print(f"Word: {display_word(word, guessed_letters)}")
+            print(f"Word: {display_word(word, guessed_letters, known_chars)}")
             print(f"Attempts left: {attempts}")
-            print(f"Guessed letters: {', '.join(sorted(guessed_letters)) if guessed_letters else 'None'}")
+            print(f"Guessed letters: {', '.join(sorted(guessed_letters - known_chars)) if guessed_letters - known_chars else 'None'}")
             print(f"Congratulations! You guessed the word: {word}")
             break
     else:
         clear_screen()
         print(get_hangman_art(attempts))
-        print(f"Word: {display_word(word, guessed_letters)}")
+        print(f"Word: {display_word(word, guessed_letters, known_chars)}")
         print(f"Attempts left: {attempts}")
-        print(f"Guessed letters: {', '.join(sorted(guessed_letters)) if guessed_letters else 'None'}")
+        print(f"Guessed letters: {', '.join(sorted(guessed_letters - known_chars)) if guessed_letters - known_chars else 'None'}")
         print(f"Game over! The word was: {word}")
 
 if __name__ == "__main__":
