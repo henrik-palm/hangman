@@ -12,7 +12,8 @@ def play_hangman_batch(batch):
 def play_hangman(word, words, trie, max_wrong_guesses, verbose=False):
     """Simulate Hangman and determine if there is a winning strategy (case insensitive)."""
     word = word.lower()
-    guessed = initialize_known_letters(word)
+    known_chars = {" ", "-", "'"}
+    guessed = initialize_known_letters(word) | known_chars
     pattern = [char if char in guessed else "_" for char in word]
     wrong_guesses = 0
     guess_sequence = []

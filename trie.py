@@ -29,10 +29,13 @@ class Trie:
     
     def _matches_pattern(self, word, pattern, guessed):
         """Check if a word matches the given pattern and guessed letters."""
-        for w, p in zip(word, pattern):
+        known_chars = {" ", "-", "'"}
+        for idx, (w, p) in enumerate(zip(word, pattern)):
             if p != "_" and p != w:
                 return False
             if p == "_" and w in guessed:
+                return False
+            if p in known_chars and word[idx] != p:
                 return False
         return True
 
