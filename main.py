@@ -7,7 +7,7 @@ from multiprocessing import Pool, cpu_count, Manager, Process
 
 def progress_monitor(total_items, progress_queue):
     """Monitor progress and print status using tqdm."""
-    with tqdm(total=total_items, desc="Processing words", mininterval=0.5, maxinterval=5) as pbar:
+    with tqdm(total=total_items, desc="Processing words") as pbar:
         processed_count = 0
         while processed_count < total_items:
             processed_count += progress_queue.get()
