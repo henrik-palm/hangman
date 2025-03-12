@@ -1,4 +1,6 @@
 import os
+from solver import best_letter
+from trie import Trie
 
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -101,7 +103,7 @@ def get_hangman_art(attempts):
     ]
     return stages[attempts]
 
-def hangman(word=None):
+def hangman(word, trie, all_words):
     clear_screen()
     if word is None:
         word = input("Enter the word for Hangman: ").strip().lower()
@@ -119,7 +121,18 @@ def hangman(word=None):
         if last_message:
             print(last_message)
         
-        guess = input("Enter a letter: ").strip().lower()
+        guess = input("Enter a letter (or type 'help' for a hint): ").strip().lower()
+        
+        if guess == "help":
+            remaining_letters = set(word) - guessed_letters
+            if remaining_letters:
+                pattern = [l if l in guessed_letters else "_" for l in word]
+                remaining_words = sorted(trie.search_pattern(pattern, guessed_letters))
+                hint = best_letter(remaining_words, all_words, pattern, guessed_letters)
+                last_message = f"Hint: Try guessing '{hint}'"
+            else:
+                last_message = "No hints available."
+            continue
         
         if len(guess) != 1 or not guess.isalpha():
             last_message = "Invalid input. Please enter a single letter."

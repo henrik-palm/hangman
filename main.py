@@ -35,17 +35,18 @@ if __name__ == "__main__":
     filename = "filtered_words.txt"
     all_words = load_words(filename)
     
-    from game import hangman
-    import random
-    if args.play:
-        word_to_use = args.play if isinstance(args.play, str) else random.choice(all_words)
-        hangman(word_to_use.lower())
-        exit()
 
     verbose = bool(args.word)
     word_list = [args.word.lower()] if args.word else all_words
     
     trie = build_trie(tqdm(all_words, desc="Building Trie"))
+
+    from game import hangman
+    import random
+    if args.play:
+        word_to_use = args.play if isinstance(args.play, str) else random.choice(all_words)
+        hangman(word_to_use.lower(), trie, all_words)
+        exit()
     
     max_wrong_guesses_required = 0
     results = []
